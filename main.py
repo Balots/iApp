@@ -1,18 +1,22 @@
-from tkinter import *
-from tkinter import ttk
-from AppLogic import scan, send_post_request, send_ip
+from req import *
+from asyncio import run
+from json import dump
 
-root = Tk()
-frm = ttk.Frame(root, padding=10)
+__DOMAIN_NAMES__ = [
+"""
+Your network computers might be write here.
+"""]
 
-frm.grid()
-ttk.Label(frm, text='PC Hardware Scan').grid(column=0, row=0)
-ttk.Button(frm, text='Scan PC', command=scan).grid(column=1, row=0)
-ttk.Button(frm, text='Load report', command=send_post_request).grid(column=3, row=0)
-ttk.Button(frm, text='Send IP', command=send_ip).grid(column=2, row=0)
-ttk.Button(frm, text="Quit", command=root.destroy).grid(column=4, row=0)
+def main():
+    for name in __DOMAIN_NAMES__:
+        collector = RequestCollector(name)
 
-root.mainloop()
+        try:run(collector.execute_gather())
+        except Exception as e: print(f'WARNING: Error during process computer {name}. Program exit with message: {e}')
 
+        result = collector.get_results()
+        with open(f"results\\{name}.json", "w", encoding="utf-8") as f:
+            dump(result, f, indent=4, ensure_ascii=False)
 
-
+if __name__ == '__main__':
+    main()

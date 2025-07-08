@@ -165,9 +165,12 @@ def script():
     for item, order in __ORDER__.items():
         for i in range(len(data)):
             if item in data[i]:
-                logger.info(f'{order} with item {item} has started.')
-                __SysReport__[item] = order(i, data)
-                logger.info(f'{__SysReport__[item]} has captured as {item}')
+                try:
+                    logger.info(f'{order} with item {item} has started.')
+                    __SysReport__[item] = order(i, data)
+                    logger.info(f'{__SysReport__[item]} has captured as {item}')
+                except Exception as e:
+                    logger.info(f'Error: {e}')
 
     return __SysReport__
 

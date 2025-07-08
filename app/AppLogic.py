@@ -1,12 +1,12 @@
-from LogHandle import script
-import json
+from app.LogHandle import script
 import subprocess
+import json
 import requests
 
 __HOST_IP__ = '192.168.1.95'
 
 def scan():
-    subprocess.run([".\PC_Hardware_Scan.bat"])
+    subprocess.run(["../bat/PC_Hardware_Scan.bat"])
     parse_result = script()
     with open('LogFile.json', 'w', encoding='utf-8') as f:
         json.dump(parse_result, f, ensure_ascii=False, indent=4)
